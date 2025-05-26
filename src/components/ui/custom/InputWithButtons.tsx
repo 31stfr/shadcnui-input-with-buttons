@@ -1,83 +1,86 @@
 import { Input } from '@/components/ui/input';
+import type { VariantProps } from 'class-variance-authority';
+import { type ComponentProps, type ReactElement } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Button, buttonVariants } from '../button';
-import { forwardRef, type ComponentProps, type ReactElement } from 'react';
-import type { VariantProps } from 'class-variance-authority';
 
+// Buttons' type
 interface ButtonSettings extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
     icon: ReactElement;
 }
 
+// "InputWithButtons" component props
 interface InputWithButtonsProps extends ComponentProps<'input'> {
+    className?: string;
     prefixButtons?: ButtonSettings[];
     suffixButtons?: ButtonSettings[];
-    wrapperClassName?: string;
 }
 
-// Shadcn Ui custom Input avec des boutons en "prefix" et "suffix"
-const InputWithButtons = forwardRef<HTMLInputElement, InputWithButtonsProps>(
-    (
-        {
-            prefixButtons = undefined,
-            suffixButtons = undefined,
-            wrapperClassName = undefined,
-            ...rest
-        },
-        ref
-    ) => {
-        const inputCss = twMerge(
-            'flex-1',
-            prefixButtons ? 'rounded-l-none' : undefined,
-            suffixButtons ? 'rounded-r-none' : undefined
-        );
+// "ParsedButtons" component props
+interface ParsedButtonsProps {
+    buttonSettings?: ButtonSettings[];
+    parsingSettings: typeof prefixSettings | typeof suffixSettings;
+}
+
+// Settings for parsing prefix buttons
+const prefixSettings = {
+    className: 'rounded-r-none',
+    extremityCheck: (index: number) => index === 0,
+    extremityClassName: 'rounded-l-none',
+    key: 'prefix-button-',
+} as const;
+
+// Settings for parsing suffix buttons
+const suffixSettings = {
+    extremityClassName: 'rounded-r-none',
+    className: 'rounded-l-none',
+    key: 'suffix-button-',
+    extremityCheck: (index: number, length: number) => index === length - 1,
+} as const;
+
+// "ParsedButtons" component to render button list based on settings
+const ParsedButtons = ({ buttonSettings, parsingSettings }: ParsedButtonsProps) => {
+    if (!buttonSettings?.length) return undefined;
+
+    return buttonSettings.map((currentButton, index) => {
+        const isExtremity = parsingSettings.extremityCheck(index, buttonSettings.length);
 
         return (
-            <div className={twMerge('flex flex-wrap', wrapperClassName)}>
-                {!!prefixButtons?.length &&
-                    prefixButtons.map((prefixButton, index) => {
-                        const firstButton = index === 0;
-
-                        return (
-                            <Button
-                                key={`prefix-button-${index}`}
-                                {...prefixButton}
-                                ref={undefined}
-                                // Renseigne le type "button" par défaut pour éviter la soumission d'un éventuel formulaire lors du click
-                                type={prefixButton.type ?? 'button'}
-                                className={twMerge(
-                                    'rounded-r-none',
-                                    firstButton ? '' : 'rounded-l-none'
-                                )}
-                            >
-                                {prefixButton.icon}
-                            </Button>
-                        );
-                    })}
-                <Input {...rest} ref={ref} className={inputCss} />
-                {!!suffixButtons?.length &&
-                    suffixButtons.map((suffixButton, index) => {
-                        const lastButton = index === suffixButtons.length - 1;
-
-                        return (
-                            <Button
-                                key={`suffix-button-${index}`}
-                                {...suffixButton}
-                                ref={undefined}
-                                // Renseigne le type "button" par défaut pour éviter la soumission d'un éventuel formulaire lors du click
-                                type={suffixButton.type ?? 'button'}
-                                className={twMerge(
-                                    'rounded-l-none',
-                                    lastButton ? '' : 'rounded-r-none'
-                                )}
-                            >
-                                {suffixButton.icon}
-                            </Button>
-                        );
-                    })}
-            </div>
+            <Button
+                key={`${parsingSettings.key}-${index}`}
+                {...currentButton}
+                type={currentButton.type ?? 'button'}
+                className={twMerge(
+                    parsingSettings.className,
+                    isExtremity ? '' : parsingSettings.extremityClassName
+                )}
+            >
+                {currentButton.icon}
+            </Button>
         );
-    }
-);
-InputWithButtons.displayName = 'InputWithButtons';
+    });
+};
+
+// Shadcn input component with buttons
+const InputWithButtons = ({
+    prefixButtons = undefined,
+    suffixButtons = undefined,
+    className = undefined,
+    ...rest
+}: InputWithButtonsProps) => {
+    const inputCss = twMerge(
+        'flex-1',
+        prefixButtons ? 'rounded-l-none' : undefined,
+        suffixButtons ? 'rounded-r-none' : undefined
+    );
+
+    return (
+        <div className={twMerge('flex flex-wrap', className)}>
+            <ParsedButtons buttonSettings={prefixButtons} parsingSettings={prefixSettings} />
+            <Input {...rest} className={inputCss} />
+            <ParsedButtons buttonSettings={suffixButtons} parsingSettings={suffixSettings} />
+        </div>
+    );
+};
 
 export default InputWithButtons;

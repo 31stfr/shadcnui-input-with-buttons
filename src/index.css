@@ -44,12 +44,12 @@
 :root {
     --radius: 0.625rem;
     --background: oklch(1 0 0);
-    --foreground: oklch(0.129 0.042 264.695);
+    --foreground: oklch(0.56 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.129 0.042 264.695);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.129 0.042 264.695);
-    --primary: oklch(0.208 0.042 265.755);
+    --primary: oklch(0.75 0.14 233);
     --primary-foreground: oklch(0.984 0.003 247.858);
     --secondary: oklch(0.968 0.007 247.896);
     --secondary-foreground: oklch(0.208 0.042 265.755);
@@ -120,28 +120,31 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-    font-weight: 500;
-    text-decoration: inherit;
-}
-
-/* a:hover {
-  color: #535bf2;
-} */
-
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
-
     body {
         @apply bg-background text-foreground;
-        @apply flex flex-col justify-center items-center gap-6 p-6;
+        @apply flex flex-col justify-center items-center gap-6;
         @apply min-h-screen;
     }
 
-    h1 {
-        @apply text-3xl text-sky-400;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply text-3xl text-rose-400;
+    }
+
+    h2 {
+        @apply text-xl;
+    }
+
+    a:link,
+    a:visited,
+    a:hover,
+    a:active {
+        @apply text-rose-400 hover:text-rose-300 transition-all duration-300;
     }
 }
 
