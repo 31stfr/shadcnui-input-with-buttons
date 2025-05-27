@@ -161,7 +161,7 @@ const App = () => {
             </div>
             <div className="text-sm p-4 py-2 rounded-4xl bg-white shadow-lg outline-8 outline-white/40">
                 A <a href="https://31st.fr">31st.fr</a> repository, using{' '}
-                <a href="https://shadcn-ui.com">shadcn/ui</a> components, CSS powered by{' '}
+                <a href="https://ui.shadcn.com">shadcn/ui</a> components, CSS powered by{' '}
                 <a href="https://tailwindcss.com">TailwindCSS</a>, built with{' '}
                 <a href="https://vite.dev">Vite</a>.
             </div>
