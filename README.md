@@ -49,4 +49,4 @@ This repository was created by [31st.fr](https://31st.fr)
 
 ## License
 
-This project is licensed under the terms of the MIT license
+This project is licensed under the terms of the [MIT license](LICENSE)
