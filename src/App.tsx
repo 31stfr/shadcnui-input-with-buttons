@@ -27,7 +27,7 @@ const App = () => {
     const [userName02, setUserName02] = useState('Hughie Campbell');
 
     return (
-        <div className="min-w-screen min-h-screen flex flex-col justify-center items-center gap-12 p-6 bg-linear-to-bl from-cyan-300 to-blue-400">
+        <div className="min-w-screen min-h-screen flex flex-col justify-center items-center gap-12 p-6 bg-linear-to-bl from-rose-400 to-rose-500">
             <div className="relative flex flex-col items-center gap-6 p-12 rounded-3xl bg-white shadow-lg outline-8 outline-white/40">
                 <div className="relative md:absolute top-0 md:left-1/2 md:-translate-x-1/2 md:-translate-y-full col-span-full flex flex-col items-center md:p-6 md:pb-0 rounded-3xl rounded-b-none bg-white outline-8 outline-white/40">
                     <h1 className="text-5xl">
